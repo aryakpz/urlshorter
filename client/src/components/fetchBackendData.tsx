@@ -4,7 +4,7 @@ import { urlProps } from "../type/types";
 
 export const useBackendFetch = () => {
     const [backendData, setBackendData] = useState<urlProps | []>([]);
-    console.log("njn", backendData)
+    // console.log( backendData)
 
     useEffect(() => {
         fetch("/api/display").then(
@@ -15,7 +15,7 @@ export const useBackendFetch = () => {
             }
         );
     }, []);
-    console.log(backendData)
+    // console.log(backendData)
     return { backendData }
 }
 

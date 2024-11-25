@@ -3,6 +3,7 @@ import db from '../database';
 
 const express = require('express');
 const router = express.Router();
+
 // create table 
 router.get('/create', (req: Request, res: Response) => {
     const createQuery = `
@@ -39,7 +40,7 @@ router.post('/add', (req: Request, res: Response) => {
     if (!url || typeof length !== "number") {
         return res.status(400).json({ message: "Invalid input" });
     }
-
+     
     const shorturl = generateUrl(length)
 
     const insertQuery = "INSERT INTO shorturl (url, length,shorturl) VALUES (?, ?,?)";
@@ -49,9 +50,21 @@ router.post('/add', (req: Request, res: Response) => {
         }
         res.status(201).json({ message: "Data added successfully" });
     });
-});         
-  
-// generate the shorter url
+});
+
+//delete the rows
+
+router.delete('/dele', (req: Request, res: Response) => {
+    const deleteQuery = "TRUN FROM shorturl";
+    db.run(deleteQuery, [], (err: { message: any }) => {
+        if (err) {
+            return res.status(500).json({ message: "Error deleting data.", error: err.message });
+        }
+        res.status(200).json({ message: "Data deleted successfully." });
+    });
+})
+
+
 const generateUrl = (length: number) => {
     const character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -63,5 +76,4 @@ const generateUrl = (length: number) => {
 }
 
 export default router;
-
-   
+  

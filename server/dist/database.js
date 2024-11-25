@@ -14,3 +14,4 @@ const db = new sqlite3_1.Database('./database.db', (err) => {
 });
 // Export the db instance so it can be used in other parts of the application
 exports.default = db;
+          

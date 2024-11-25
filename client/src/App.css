@@ -1,38 +1,120 @@
-.App {
-  text-align: center;
+body {
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.mainsection {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-flow: column;
+  margin: 0 auto;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+h2 {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.url-generate {
+  display: flex;
+  flex-flow: column;
+  box-shadow: 0 1px 3px;
+  padding: 40px;
+  width: max-content;
+}
+
+.url-generate div {
+  padding: 20px;
+  font-size: 20px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.url-generate div input {
+  border: none;
+  border-bottom: 1px solid rgb(99, 97, 97);
+  font-size: 22px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  padding: 10px;
+}
+
+.url-generate div input:focus {
+  outline: none;
+  background-color: aliceblue;
+}
+
+button {
+  border: none;
+  background-color: rgb(49, 107, 109);
   color: white;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 15px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+table {
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+table,
+tr,
+td {
+  border: 1PX SOLID black;
+
+}
+
+td {
+  padding: 14px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.show-url {
+  width: 100%;
+  max-width: 420px;
+  margin: 30px;
+
+}
+
+button:hover {
+  background-color: rgb(107, 170, 154);
+  color: rgb(28, 39, 39);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.navsection {
+  width: 100%;
+  background-color: rgb(46, 80, 80);
+}
+
+nav {
+  display: flex;
+  width: 96%;
+  justify-content: right;
+
+
+}
+
+nav a {
+  color: rgb(228, 221, 221);
+  text-decoration: none;
+  padding: 15px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 21px;
+  border-radius: 5px;
+}
+
+nav a:hover {
+  color: rgb(46, 80, 80);
+  background-color: white;
+}
+
+nav a:active {
+  transform: scale(0.98);
+  background-color: rgb(199, 243, 233);
 }
