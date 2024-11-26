@@ -56,6 +56,7 @@ button {
 
 table {
   width: 100%;
+  min-width:690px;
 }
 
 table,
@@ -95,8 +96,6 @@ nav {
   display: flex;
   width: 96%;
   justify-content: right;
-
-
 }
 
 nav a {
@@ -117,4 +116,20 @@ nav a:hover {
 nav a:active {
   transform: scale(0.98);
   background-color: rgb(199, 243, 233);
+}
+.mainurl{
+  max-width: fit-content;
+  min-width: 700px;
+}
+.shorturl{
+  min-width: 300px;
+}
+
+table a{
+  text-decoration: none;
+  color: black;
+}
+table a:hover{
+  text-decoration: underline;
+  color: rgb(32, 86, 122);
 }
