@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavBar } from "./navBar";
+import axios from "axios";
 
 export const MainPage: React.FC = () => {
     const [length, setLength] = useState<number>(0);
@@ -22,20 +23,14 @@ export const MainPage: React.FC = () => {
         const datasec = { url, length };
 
         try {
-            const response = await fetch("/api/add", {
+            const response = await axios.post("/api/add",datasec, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(datasec),
             });
-            if (!response.ok) {
-                throw new Error("Failed to add data to the database.");
-            }
-            const result = await response.json();
-            console.log("Data added successfully:", result);
 
-          
+            console.log("Data added successfully");
             setUrl("");
             setLength(0);
 

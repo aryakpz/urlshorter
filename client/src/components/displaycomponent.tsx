@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { NavBar } from "./navBar";
 import { useBackendFetch } from "./fetchBackendData";
 import { DeleteButton } from "./deleteApi";
+import axios from "axios";
 
 export const DisplayComponent: React.FC = () => {
     const { backendData, setBackendData } = useBackendFetch();
     const [edit, setEdit] = useState<string | null>(null)
     const [newUrl, seturl] = useState<string>("")
     const [alertm, setAlert] = useState<string | null>(null)
+
+    // copy to clipboard
 
     const handleCopy = (shortUrl: string) => {
         navigator.clipboard
@@ -20,23 +23,43 @@ export const DisplayComponent: React.FC = () => {
             .catch(err => console.error("failed to copy the url"))
     }
 
-  // editing function
-  const handleEdit = (shortUrl: string, url: string) => {
-    setEdit(shortUrl);
-    seturl(url); 
-};
-//  save after editing
-const handleSave = (shortUrl: string) => {
-    console.log("Updated URL for", shortUrl, ":", newUrl);
+    // editing function
+    const handleEdit =async (shortUrl: string, url: string) => {
+        setEdit(shortUrl);
+        seturl(url);
+        try {
+            const response = await axios.put(`/api/update/${shortUrl}`, { url: newUrl }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (response.status === 200) {
+                console.log("URL updated successfully:", response.data);
+                
+                setBackendData((prevData) =>
+                    prevData.map((item) =>
+                        item.shorturl === shortUrl ? { ...item, url: newUrl } : item
+                    )
+                );
+            }
+            setEdit(null); 
+        } catch (error) {
+            console.error("Error updating URL:", error);
+        }
+    };
+
+    //  save after editing
+    const handleSave = (shortUrl: string) => {
+        console.log("Updated URL for", shortUrl, ":", newUrl);
 
         setBackendData((prevData) =>
             prevData.map((item) =>
                 item.shorturl === shortUrl ? { ...item, url: newUrl } : item
             )
         );
-        setEdit(null); 
-    
-};
+        setEdit(null);
+
+    };
 
 
     return (
@@ -72,10 +95,10 @@ const handleSave = (shortUrl: string) => {
                                         <td className="mainurl">
                                             {edit === item.shorturl ? (
                                                 <>
-                                                    <input  className="input-edit"
+                                                    <input className="input-edit"
                                                         type="text"
                                                         value={newUrl}
-                                                        onChange={(e) => seturl(e.target.value)} 
+                                                        onChange={(e) => seturl(e.target.value)}
                                                     />
                                                     <button onClick={() => handleSave(item.shorturl)}>Save</button>
                                                 </>

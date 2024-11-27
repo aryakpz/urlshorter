@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useBackendFetch } from "./fetchBackendData";
 
 type DeleteProps={
@@ -9,19 +10,12 @@ export const DeleteButton:React.FC<DeleteProps>=({shorturl})=>{
     const {setBackendData}=useBackendFetch()
     const handleDelete=()=>{
         console.log(shorturl)
-        fetch(`/api/delete/${shorturl}`,
+        axios.delete(`/api/delete/${shorturl}`,
             {method:'DELETE'})
             .then(response =>{
-                if(response.ok)
-                {
-                    console.log("url deleted successfully")
                     setBackendData((prevData) =>
                         prevData.filter((item) => item.shorturl !== shorturl) 
                       );
-                }
-                else{
-                    console.error("Error on deleting")
-                }
             })
         .catch(error =>console.log('Error:',error))
     }

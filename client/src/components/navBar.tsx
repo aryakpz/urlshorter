@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 
 export const NavBar:React.FC=()=>{
 
-
 return(
     <div className="navsection">
         <nav>
