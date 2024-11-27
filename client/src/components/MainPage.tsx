@@ -1,8 +1,4 @@
-
-
 import React, { useState } from "react";
-import { useBackendFetch } from "./fetchBackendData";
-import { urlProps } from "../type/types";
 import { NavBar } from "./navBar";
 
 export const MainPage: React.FC = () => {

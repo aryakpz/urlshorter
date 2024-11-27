@@ -52,6 +52,7 @@ button {
   padding: 10px;
   font-size: 15px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  cursor: pointer;
 }
 
 table {
@@ -65,18 +66,17 @@ td {
   border: 1PX SOLID black;
 
 }
+table{
+  width: 100%;
+ margin: 30px;
+  max-width: 96%;
+}
 
 td {
   padding: 14px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.show-url {
-  width: 100%;
-  max-width: 420px;
-  margin: 30px;
-
-}
 
 button:hover {
   background-color: rgb(107, 170, 154);
@@ -119,17 +119,47 @@ nav a:active {
 }
 .mainurl{
   max-width: fit-content;
-  min-width: 700px;
-}
-.shorturl{
-  min-width: 300px;
 }
 
 table a{
   text-decoration: none;
   color: black;
+ 
 }
-table a:hover{
-  text-decoration: underline;
+table td:hover{
   color: rgb(32, 86, 122);
+  cursor: pointer;
 }
+
+.custom-alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  text-align: center;
+  z-index: 1000;
+  display: none;
+}
+
+.custom-alert.show {
+  display: block;
+}
+
+.custom-alert td {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-alert button:hover {
+  background-color: #0056b3;
+}
+

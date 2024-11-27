@@ -16,6 +16,6 @@ export const useBackendFetch = () => {
         );
     }, []);
     // console.log(backendData)
-    return { backendData }
+    return { backendData,setBackendData }
 }
 

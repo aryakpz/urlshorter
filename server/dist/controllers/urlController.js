@@ -3,11 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.redirectUrl = exports.editUrl = exports.deleteUrl = exports.postUrl = exports.getUrls = exports.getUrl = void 0;
 const database_1 = __importDefault(require("../database"));
-const express = require('express');
-const router = express.Router();
-// create table 
-router.get('/create', (req, res) => {
+// create the table 
+const getUrl = (req, res) => {
     const createQuery = `
     CREATE TABLE IF NOT EXISTS URLTABLE (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,9 +21,10 @@ router.get('/create', (req, res) => {
         }
         res.send('Table created successfully');
     });
-});
-//display all the data
-router.get('/display', (req, res) => {
+};
+exports.getUrl = getUrl;
+//  get all the urls in the database
+const getUrls = (req, res) => {
     console.log("display");
     const getQuery = "SELECT * FROM URLTABLE";
     database_1.default.all(getQuery, [], (err, rows) => {
@@ -33,9 +33,10 @@ router.get('/display', (req, res) => {
         }
         res.status(200).json(rows);
     });
-});
-//post the url
-router.post('/add', (req, res) => {
+};
+exports.getUrls = getUrls;
+// post new url into the database
+const postUrl = (req, res) => {
     const { url, length } = req.body;
     if (!url || typeof length !== "number") {
         return res.status(400).json({ message: "Invalid input" });
@@ -48,19 +49,20 @@ router.post('/add', (req, res) => {
         }
         res.status(201).json({ message: "Data added successfully" });
     });
-});
-//delete the rows
-// router.delete('/delete', (req: Request, res: Response) => {
-//     const deleteQuery = "TRUNCATE TABLE URLTABLE";
-//     db.run(deleteQuery, [], (err: { message: any }) => {
-//         if (err) {
-//             return res.status(500).json({ message: "Error deleting data.", error: err.message });
-//         }
-//         res.status(200).json({ message: "Data deleted successfully." });
-//     });
-// })
-//delete the row
-router.delete('/delete/:shorturl', (req, res) => {
+};
+exports.postUrl = postUrl;
+// generating the short key for each url
+function generateUrl(length) {
+    const character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const short = Math.floor(Math.random() * character.length);
+        result += character[short];
+    }
+    return result;
+}
+//delete the url from  the database
+const deleteUrl = (req, res) => {
     const { shorturl } = req.params;
     console.log(23432, req.params);
     const deleteQuery = "DELETE FROM URLTABLE WHERE shorturl=?";
@@ -74,9 +76,10 @@ router.delete('/delete/:shorturl', (req, res) => {
         }
         res.status(200).json({ message: `Short URL '${shorturl}' deleted successfully.` });
     });
-});
-//update the url
-router.put('/edit/:shorturl', (req, res) => {
+};
+exports.deleteUrl = deleteUrl;
+// update the url
+const editUrl = (req, res) => {
     const { shorturl } = req.params;
     const { newurl } = req.body;
     if (!newurl) {
@@ -93,9 +96,10 @@ router.put('/edit/:shorturl', (req, res) => {
         }
         res.status(200).json({ message: `url updated successfully ` });
     });
-});
-// redirect into the mainurl 
-router.get('/:shorturl', (req, res) => {
+};
+exports.editUrl = editUrl;
+// short url redirect into the main url 
+const redirectUrl = (req, res) => {
     const { shorturl } = req.params;
     const findQuery = "SELECT url FROM URLTABLE WHERE shorturl = ?";
     database_1.default.get(findQuery, [shorturl], (err, row) => {
@@ -109,14 +113,5 @@ router.get('/:shorturl', (req, res) => {
         const originalUrl = row.url;
         res.redirect(originalUrl);
     });
-});
-function generateUrl(length) {
-    const character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        const short = Math.floor(Math.random() * character.length);
-        result += character[short];
-    }
-    return result;
-}
-exports.default = router;
+};
+exports.redirectUrl = redirectUrl;
