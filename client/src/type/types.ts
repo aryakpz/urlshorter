@@ -1,6 +1,13 @@
 
 export type urlProps={
+    id:number,
     url:string,
     length:number,
-    short:string
+    key:string,
+    shorturl:string
 }[]
+
+export type CopyProps={
+    shorturl:string;
+    handleCopy:(text:string)=>void
+}
