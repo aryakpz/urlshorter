@@ -163,3 +163,12 @@ table td:hover{
   background-color: #0056b3;
 }
 
+
+.mainurl input{
+  min-width: 90%;
+  padding: 7px;
+  font-size: 15px;
+}
+.mainurl input:focus{
+  outline: none;
+}

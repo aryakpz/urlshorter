@@ -1,17 +1,17 @@
 
-import {deleteUrl, editUrl, getUrls, redirectUrl} from '../controllers/urlController';
+import {createTable,deleteUrl, editUrl, getUrls, redirectUrl, postUrl} from '../controllers/urlController';
 
 const express = require('express');
 const router = express.Router();
 
 // create table 
-router.get('/create',getUrls);
+router.get('/create',createTable);
 
 //get all the urls
 router.get('/display', getUrls);
 
 //post the url
-router.post('/add',);
+router.post('/add',postUrl);
 
 //delete the url
 router.delete('/delete/:shorturl', deleteUrl);
@@ -27,4 +27,4 @@ router.get('/:shorturl',redirectUrl)
 export default router;
 
 
-    
+        

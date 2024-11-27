@@ -4,7 +4,6 @@ import { urlProps } from "../type/types";
 
 export const useBackendFetch = () => {
     const [backendData, setBackendData] = useState<urlProps | []>([]);
-    // console.log( backendData)
 
     useEffect(() => {
         fetch("/api/display").then(
@@ -14,8 +13,8 @@ export const useBackendFetch = () => {
                 setBackendData(data);
             }
         );
-    }, []);
-    // console.log(backendData)
+    }, [backendData,setBackendData]);
+
     return { backendData,setBackendData }
 }
 
