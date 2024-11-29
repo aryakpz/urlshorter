@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const urlController_1 = require("../controllers/urlController");
 const express = require('express');
 const router = express.Router();
-// create table 
-router.get('/create', urlController_1.createTable);
 //get all the urls
 router.get('/display', urlController_1.getUrls);
 //post the url

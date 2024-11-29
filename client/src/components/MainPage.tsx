@@ -12,6 +12,7 @@ export const MainPage: React.FC = () => {
         if (id === "url") {
             setUrl(value);
         } else if (id === "length") {
+            
             const inputLength = Number(value);
             if (!isNaN(inputLength)) {
                 setLength(inputLength);
@@ -60,6 +61,9 @@ export const MainPage: React.FC = () => {
                             type="number"
                             value={length || ''}
                             placeholder="Enter the Length here "
+                            // min="1"
+                            max="23"
+                        
                             onChange={(e) => handleChange(e, "length")}
                         />
                     </div>

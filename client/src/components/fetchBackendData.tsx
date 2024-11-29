@@ -1,20 +1,33 @@
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { urlProps } from "../type/types";
 
-export const useBackendFetch = () => {
-    const [backendData, setBackendData] = useState<urlProps | []>([]);
 
-    useEffect(() => {
-        axios.get("/api/display")
-        .then(response=>{
-            setBackendData(response.data)
-        })
-        .catch(err =>console.error(err));
-        
-    }, [backendData,setBackendData]);
 
-    return { backendData,setBackendData }
-}
-
+type BackendResponse ={
+    message: string;
+    success: boolean;
+    data: urlProps[];
+  }
+  
+  export const useBackendFetch = () => {
+      const [backendData, setBackendData] = useState<BackendResponse | null>(null);
+  
+      useEffect(() => {
+          fetch("/api/display")
+              .then(response => response.json())
+              .then(data => {
+                setBackendData({
+                    message: data.message,
+                    success: data.success,
+                    data: data.data, 
+                  });
+                
+              })
+              .catch(error => {
+                  console.error("Error fetching data:", error);
+              });
+      }, []);
+      console.log("everve",backendData)
+      return { backendData, setBackendData };
+  }
+  
