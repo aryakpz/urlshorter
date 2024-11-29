@@ -1,37 +1,106 @@
+
 import React, { useState } from "react";
 import { NavBar } from "./navBar";
 import { useBackendFetch } from "./fetchBackendData";
 import { DeleteButton } from "./deleteApi";
-import { EditButton } from "./editApi";
+import axios from "axios";
+import { urlProps } from "../type/types";
 
 export const DisplayComponent: React.FC = () => {
-    const { backendData } = useBackendFetch();
-    const [alertm,setAlert]=useState<string |null>(null)
-    
-    const handleCopy=(shortUrl:string)=>{
+    const { backendData, setBackendData } = useBackendFetch();
+    const [edit, setEdit] = useState<string | null>(null);
+    const [newUrl, seturl] = useState<string>("");
+
+    const [alertm, setAlert] = useState<string | null>(null);
+
+    // copy to clipboard
+    const handleCopy = (shortUrl: string) => {
         navigator.clipboard
-        .writeText(shortUrl)
-        .then(()=>{
-            // alert("copied")
-            console.log(alertm)
-            setAlert("copied")
-            setTimeout(()=>setAlert(null),2000)
-        })
-        .catch(err =>console.error("failed to copy the url"))
-    }
+            .writeText(shortUrl)
+            .then(() => {
+                console.log(alertm);
+                setAlert("copied");
+                setTimeout(() => setAlert(null), 2000);
+            })
+            .catch((err) => console.error("failed to copy the url"));
+    };
+
+    // url editing function
+    const handleEdit = async (shortUrl: string, url: string) => {
+        setEdit(shortUrl);
+        seturl(url);
+        try {
+            
+            const response = await axios.put(`/api/update/${shortUrl}`, { url: newUrl }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.status === 200) {
+                console.log("URL updated successfully:", response.data);
+
+                setBackendData((prevData) => {
+                    if (prevData && prevData.data) {
+                        return {
+                            ...prevData, 
+                            data: prevData.data.map((item) =>
+                                item.shorturl === shortUrl ? { ...item, url: newUrl } : item
+                            ), 
+                        };
+                    }
+                    return prevData; 
+                });
+            }
+
+            setEdit(null);
+        } catch (error) {
+            console.error("Error updating URL:", error);
+        }
+    };
+
+    
+    const handleSave = (shortUrl: string) => {
+        console.log("Updated URL for", shortUrl, ":", newUrl);
+
+        setBackendData((prevData) =>
+            prevData && prevData.data
+                ? {
+                      ...prevData, 
+                      data: prevData.data.map((item) =>
+                          item.shorturl === shortUrl ? { ...item, url: newUrl } : item
+                      ), 
+                  }
+                : prevData 
+        );
+
+        setEdit(null);
+    };
+
+    // // delete function
+    // const handleDelete = (shortUrl: string) => {
+    //     setBackendData((prevData) => {
+    //         if (prevData && prevData.data) {
+    //             return {
+    //                 ...prevData, 
+    //                 data: prevData.data.filter((item) => item.shorturl !== shortUrl), 
+    //             };
+    //         }
+    //         return prevData; // If no data, return prevData as is
+    //     });
+    // };
+    // console.log(backendData, "12023");
 
     return (
         <div>
             <NavBar />
             <div className="show-url">
-                <div >
+                <div>
                     <table>
                         <thead>
                             <tr>
                                 <th> no: </th>
-                                <th>
-                                    Short URL</th>
-                                {/* <th>key</th> */}
+                                <th>Short URL</th>
                                 <th>Main URL</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
@@ -39,25 +108,43 @@ export const DisplayComponent: React.FC = () => {
                         </thead>
                         <tbody>
                             {backendData &&
-                                backendData.map((item, index) => (
+                                backendData.data.map((item, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
-                                     
-                                        {/* <td>{item.id}</td> */}
                                         <td className="shorturl">
-                                            <span onClick={() => handleCopy(`http://localhost:5002/api/${item.shorturl}`)}>
+                                            <span
+                                                onClick={() =>
+                                                    handleCopy(`http://localhost:5002/api/${item.shorturl}`)
+                                                }
+                                            >
                                                 http://localhost:5002/api/{item.shorturl}
                                             </span>
-                                           {alertm && (
+                                            {alertm && (
                                                 <div className="custom-alert">
                                                     <p>{alertm}</p>
                                                 </div>
-                                            )}       
+                                            )}
                                         </td>
-                                        <td className="mainurl" >{item.url}</td>
-                                        
-                                        <td><EditButton  /></td>
-                                        <td><DeleteButton/></td>
+                                        <td className="mainurl">
+                                            {edit === item.shorturl ? (
+                                                <>
+                                                    <input
+                                                        className="input-edit"
+                                                        type="text"
+                                                        value={newUrl}
+                                                        onChange={(e) => seturl(e.target.value)}
+                                                    />
+                                                    <button onClick={() => handleSave(item.shorturl)}>Save</button>
+                                                </>
+                                            ) : (
+                                                item.url
+                                            )}
+                                        </td>
+
+                                        <td><button onClick={() => handleEdit(item.shorturl, item.url)}>Edit</button></td>
+                                        {/* <td><button onClick={() => handleDelete(item.shorturl)}>Delete</button></td> */}
+                                         <td><DeleteButton shorturl={item.shorturl}/></td>
+
                                     </tr>
                                 ))}
                         </tbody>
@@ -65,5 +152,5 @@ export const DisplayComponent: React.FC = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

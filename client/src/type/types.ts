@@ -5,9 +5,13 @@ export type urlProps={
     length:number,
     key:string,
     shorturl:string
-}[]
+}
 
 export type CopyProps={
     shorturl:string;
     handleCopy:(text:string)=>void
+}
+
+export type EditProps={
+
 }
