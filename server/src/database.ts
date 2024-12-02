@@ -1,4 +1,3 @@
-
 // src/database.ts
 import { Database } from 'sqlite3'; 
 

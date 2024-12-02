@@ -13,7 +13,7 @@ export async function getUrlsFromDb(): Promise<any[]> {
                 }
             });
         });
-        console.log(456, urls);
+        // console.log(456, urls);
         return urls;
     } catch (error) {
         console.error("Error fetching data from database:");
@@ -25,7 +25,7 @@ export async function getUrlsFromDb(): Promise<any[]> {
 export const addUrlToDb = async (url: string, length: number, shorturl: string): Promise<void> => {
     return new Promise((resolve, reject) => {
         const insertQuery = "INSERT INTO URLTABLE (url, length, shorturl) VALUES (?, ?, ?)";
-        db.run(insertQuery, [url, length, shorturl], function (err) {
+        db.run(insertQuery, [url, length, shorturl], (err) => {
             if (err) {
                 console.error("Error inserting into database:", err.message);
                 reject(err);
@@ -53,7 +53,7 @@ export const deleteFromDb = (shorturl: string): Promise<void> => {
         const deleteQuery = "DELETE  FROM URLTABLE  WHERE shorturl=?";
         db.run(deleteQuery, [shorturl], function (err) {
             if (err) {
-                console.error("Error deleting from database:", err.message);
+                console.log("Error deleting from database:", err.message);
                 reject(err);
             } else {
                 resolve();
@@ -63,32 +63,36 @@ export const deleteFromDb = (shorturl: string): Promise<void> => {
 };
 
 // update the url
-export const updateFromDb = (shorturl: string, newurl: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        const updateQuery = "UPDATE  URLTABLE SET url=?  WHERE shorturl =?";
-        db.run(updateQuery,[shorturl,newurl],function(err){
-            if(err){
-                reject(err)
-            }
-            else{
-                resolve()
-            }
-        })
+export const updateFromDb = (url: string, shorturl: string): Promise<void> => {
+    console.log(url, shorturl );
 
-    })
-}
+    return new Promise((resolve, reject) => {
+        const updateQuery = "UPDATE URLTABLE SET url = ? WHERE shorturl = ?";
+        db.run(updateQuery, [url, shorturl], function (err) {
+            if (err) {
+                console.error("Database update error:", err.message);
+                return reject(err);
+            }
+            if (this.changes === 0) {
+                return reject(new Error("No updates."));
+            }
+
+            console.log(`Update successful: ${this.changes}`);
+            resolve();
+        });
+    });
+};
+
 
 //redirecting into main url
-
 export const findUrlFromDb = (shorturl: string): Promise<string> => {
     return new Promise((resolve, reject) => {
         const findUrl = "SELECT url FROM URLTABLE WHERE shorturl=?";
-        
         db.get(findUrl, [shorturl], (err: any, row: { url: string }) => {
             if (err) {
-                reject(err); 
+                reject(err);
             } else {
-                resolve(row.url); 
+                resolve(row.url);
             }
         });
     });

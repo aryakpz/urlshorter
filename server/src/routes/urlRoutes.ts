@@ -1,7 +1,6 @@
-
 import {deleteUrl, editUrl, getUrls, redirectUrl, postUrl} from '../controllers/urlController';
 import { validationMiddleware } from '../middleware/validationMiddleware';
-import { urlSchema } from '../schemas/url.schema';
+import { editSchema, urlSchema } from '../schemas/url.schema';
 
 const express = require('express');
 const router = express.Router();
@@ -10,18 +9,15 @@ const router = express.Router();
 router.get('/display',getUrls);
 
 //post the url
-router.post('/add',postUrl);
+router.post('/add',validationMiddleware(urlSchema),postUrl);
 
 //delete the url
 router.delete('/delete/:shorturl', deleteUrl);
 
 //update the url
-router.put('/edit/:shorturl',editUrl)
+router.put('/edit/:shorturl',validationMiddleware(editSchema),editUrl)
 
 // redirect into the mainurl 
 router.get('/:shorturl',redirectUrl)
-    
+
 export default router;
-
-
-        

@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { urlProps } from "../type/types";
+import { useEffect, useState } from "react";
+import { BackendResponse } from "../type/types";
 
-
-
-type BackendResponse ={
-    message: string;
-    success: boolean;
-    data: urlProps[];
-  }
-  
   export const useBackendFetch = () => {
       const [backendData, setBackendData] = useState<BackendResponse | null>(null);
   
@@ -20,8 +12,7 @@ type BackendResponse ={
                     message: data.message,
                     success: data.success,
                     data: data.data, 
-                  });
-                
+                  });    
               })
               .catch(error => {
                   console.error("Error fetching data:", error);
@@ -29,5 +20,5 @@ type BackendResponse ={
       }, []);
       console.log("everve",backendData)
       return { backendData, setBackendData };
-  }
-  
+  }    
+ 

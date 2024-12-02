@@ -57,18 +57,18 @@ button {
 
 table {
   width: 100%;
-  min-width:690px;
+  min-width: 690px;
 }
 
 table,
 tr,
 td {
   border: 1PX SOLID black;
-
 }
-table{
+
+table {
   width: 100%;
- margin: 30px;
+  margin: 30px;
   max-width: 96%;
 }
 
@@ -76,7 +76,6 @@ td {
   padding: 14px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
 
 button:hover {
   background-color: rgb(107, 170, 154);
@@ -117,16 +116,18 @@ nav a:active {
   transform: scale(0.98);
   background-color: rgb(199, 243, 233);
 }
-.mainurl{
+
+.mainurl {
   max-width: fit-content;
 }
 
-table a{
+table a {
   text-decoration: none;
   color: black;
- 
+
 }
-table td:hover{
+
+table td:hover {
   color: rgb(32, 86, 122);
   cursor: pointer;
 }
@@ -163,12 +164,12 @@ table td:hover{
   background-color: #0056b3;
 }
 
-
-.mainurl input{
+.mainurl input {
   min-width: 90%;
   padding: 7px;
   font-size: 15px;
 }
-.mainurl input:focus{
+
+.mainurl input:focus {
   outline: none;
 }

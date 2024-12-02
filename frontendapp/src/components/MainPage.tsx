@@ -8,29 +8,25 @@ export const MainPage: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
         const value = e.target.value;
-
         if (id === "url") {
             setUrl(value);
         } else if (id === "length") {
-            
             const inputLength = Number(value);
             if (!isNaN(inputLength)) {
                 setLength(inputLength);
             }
-        }    
+        }
     };
 
     const handleClick = async () => {
         const datasec = { url, length };
-
         try {
-            const response = await axios.post("/api/add",datasec, {
+             await axios.post("/api/add", datasec, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-
             console.log("Data added successfully");
             setUrl("");
             setLength(0);
@@ -38,14 +34,12 @@ export const MainPage: React.FC = () => {
         } catch (error) {
             console.error("Error submitting data:", error);
         }
-       
     };
 
     return (
         <>
             <NavBar />
             <div className="mainsection">
-
                 <h2>Short URL</h2>
                 <div className="url-generate">
                     <div className="url-enter">
@@ -61,9 +55,7 @@ export const MainPage: React.FC = () => {
                             type="number"
                             value={length || ''}
                             placeholder="Enter the Length here "
-                            // min="1"
                             max="23"
-                        
                             onChange={(e) => handleChange(e, "length")}
                         />
                     </div>

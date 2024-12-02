@@ -1,22 +1,18 @@
 import './App.css';
 import { DisplayComponent } from './components/displaycomponent';
 import { MainPage } from './components/MainPage';
-
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
-
 function App() {
-  
   return (
-  
-      <BrowserRouter>
+    <BrowserRouter>
       <Routes>
-        <Route  path='/' element={<MainPage/>}/>
-        <Route  path='/display' element={<DisplayComponent/>}/>
+        <Route path='/' element={<MainPage />} />
+        <Route path='/display' element={<DisplayComponent />} />
       </Routes>
-      </BrowserRouter>
-
+    </BrowserRouter>
   );
 }
 
 export default App;
+                                 

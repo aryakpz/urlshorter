@@ -1,8 +1,5 @@
-
-import { constants } from "../constants"
 import db from "../database";
-import { NextFunction, Request, response, Response } from "express";
-import asyncHandler from "express-async-handler"
+import { NextFunction, Request, Response } from "express";
 import { addUrlToDb, deleteFromDb, findUrlFromDb, generateShortUrl, getUrlsFromDb, updateFromDb } from "../services/url.services";
 
 // get all urls
@@ -20,6 +17,7 @@ export const getUrls = async (req: Request, res: Response, next: NextFunction) =
     } catch (error) {
         next(error);
     }
+    console.log(db)
 };
 
 //post a new url
@@ -40,16 +38,19 @@ export const postUrl = async (req: Request, res: Response, next: NextFunction) =
 
 //delete a  url
 export const deleteUrl = async (req: Request, res: Response, next: NextFunction) => {
+    console.log(890)
     try {
         const { shorturl } = req.params;
-        await deleteFromDb(shorturl)
+      const response=  await deleteFromDb(shorturl)
         res.status(200).json({
             message: "Data deleted successfully",
             success: true,
             data: { shorturl }
         })
-
+        console.log(789,response)
     } catch (error) {
+        console.log(7890098765,error)
+
         next(error);
     }
 }
@@ -58,12 +59,13 @@ export const deleteUrl = async (req: Request, res: Response, next: NextFunction)
 export const editUrl = async (req: any, res: any, next: NextFunction) => {
     try {
         const { shorturl } = req.params;
-        const { newurl } = req.body
-        await updateFromDb(shorturl, newurl)
+        const { url } = req.body;
+        console.log("new",url)
+        const updated = await updateFromDb(url,shorturl)
         res.status(200).json({
             message: "url updated successfully",
             success: true,
-            data: { newurl }
+            data: updated
         })
     } catch (error) {
         next(error)
@@ -79,20 +81,6 @@ export const redirectUrl = async (req: any, res: any, next: NextFunction) => {
         next(error)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

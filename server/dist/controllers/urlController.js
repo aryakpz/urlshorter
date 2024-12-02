@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.redirectUrl = exports.editUrl = exports.deleteUrl = exports.postUrl = exports.getUrls = void 0;
+const database_1 = __importDefault(require("../database"));
 const url_services_1 = require("../services/url.services");
 // get all urls
 const getUrls = async (req, res, next) => {
@@ -18,6 +22,7 @@ const getUrls = async (req, res, next) => {
     catch (error) {
         next(error);
     }
+    console.log(database_1.default);
 };
 exports.getUrls = getUrls;
 //post a new url
@@ -39,16 +44,19 @@ const postUrl = async (req, res, next) => {
 exports.postUrl = postUrl;
 //delete a  url
 const deleteUrl = async (req, res, next) => {
+    console.log(890);
     try {
         const { shorturl } = req.params;
-        await (0, url_services_1.deleteFromDb)(shorturl);
+        const response = await (0, url_services_1.deleteFromDb)(shorturl);
         res.status(200).json({
             message: "Data deleted successfully",
             success: true,
             data: { shorturl }
         });
+        console.log(789, response);
     }
     catch (error) {
+        console.log(7890098765, error);
         next(error);
     }
 };
@@ -57,12 +65,13 @@ exports.deleteUrl = deleteUrl;
 const editUrl = async (req, res, next) => {
     try {
         const { shorturl } = req.params;
-        const { newurl } = req.body;
-        await (0, url_services_1.updateFromDb)(shorturl, newurl);
+        const { url } = req.body;
+        console.log("new", url);
+        const updated = await (0, url_services_1.updateFromDb)(url, shorturl);
         res.status(200).json({
             message: "url updated successfully",
             success: true,
-            data: { newurl }
+            data: updated
         });
     }
     catch (error) {

@@ -1,95 +1,52 @@
-
 import React, { useState } from "react";
 import { NavBar } from "./navBar";
 import { useBackendFetch } from "./fetchBackendData";
 import { DeleteButton } from "./deleteApi";
 import axios from "axios";
-import { urlProps } from "../type/types";
+import { useQuery } from "@tanstack/react-query";
+import { DEFAULT_MAX_VERSION } from "tls";
 
 export const DisplayComponent: React.FC = () => {
     const { backendData, setBackendData } = useBackendFetch();
     const [edit, setEdit] = useState<string | null>(null);
     const [newUrl, seturl] = useState<string>("");
 
-    const [alertm, setAlert] = useState<string | null>(null);
-
-    // copy to clipboard
+    // Copy to clipboard
     const handleCopy = (shortUrl: string) => {
         navigator.clipboard
-            .writeText(shortUrl)
-            .then(() => {
-                console.log(alertm);
-                setAlert("copied");
-                setTimeout(() => setAlert(null), 2000);
-            })
-            .catch((err) => console.error("failed to copy the url"));
+            .writeText(shortUrl)  
     };
 
-    // url editing function
-    const handleEdit = async (shortUrl: string, url: string) => {
+    // URL editing function 
+    const handleEdit = (shortUrl: string, currentUrl: string) => {
         setEdit(shortUrl);
-        seturl(url);
+        seturl(currentUrl);
+    };
+    
+    const handleSave = async (shortUrl: string) => {
         try {
-            
-            const response = await axios.put(`/api/update/${shortUrl}`, { url: newUrl }, {
+            const response = await axios.put(`/api/edit/${shortUrl}`, { url: newUrl }, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-
             if (response.status === 200) {
-                console.log("URL updated successfully:", response.data);
-
-                setBackendData((prevData) => {
-                    if (prevData && prevData.data) {
-                        return {
-                            ...prevData, 
+                setBackendData((prevData) =>
+                    prevData && prevData.data
+                        ? {
+                            ...prevData,
                             data: prevData.data.map((item) =>
                                 item.shorturl === shortUrl ? { ...item, url: newUrl } : item
-                            ), 
-                        };
-                    }
-                    return prevData; 
-                });
+                            ),
+                        }
+                        : prevData
+                );
+                setEdit(null);
             }
-
-            setEdit(null);
         } catch (error) {
             console.error("Error updating URL:", error);
         }
     };
-
-    
-    const handleSave = (shortUrl: string) => {
-        console.log("Updated URL for", shortUrl, ":", newUrl);
-
-        setBackendData((prevData) =>
-            prevData && prevData.data
-                ? {
-                      ...prevData, 
-                      data: prevData.data.map((item) =>
-                          item.shorturl === shortUrl ? { ...item, url: newUrl } : item
-                      ), 
-                  }
-                : prevData 
-        );
-
-        setEdit(null);
-    };
-
-    // // delete function
-    // const handleDelete = (shortUrl: string) => {
-    //     setBackendData((prevData) => {
-    //         if (prevData && prevData.data) {
-    //             return {
-    //                 ...prevData, 
-    //                 data: prevData.data.filter((item) => item.shorturl !== shortUrl), 
-    //             };
-    //         }
-    //         return prevData; // If no data, return prevData as is
-    //     });
-    // };
-    // console.log(backendData, "12023");
 
     return (
         <div>
@@ -98,12 +55,12 @@ export const DisplayComponent: React.FC = () => {
                 <div>
                     <table>
                         <thead>
-                            <tr>
-                                <th> no: </th>
+                            <tr>                                   
+                                <th> No: </th>
                                 <th>Short URL</th>
                                 <th>Main URL</th>
                                 <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Delete</th>         
                             </tr>
                         </thead>
                         <tbody>
@@ -119,11 +76,6 @@ export const DisplayComponent: React.FC = () => {
                                             >
                                                 http://localhost:5002/api/{item.shorturl}
                                             </span>
-                                            {alertm && (
-                                                <div className="custom-alert">
-                                                    <p>{alertm}</p>
-                                                </div>
-                                            )}
                                         </td>
                                         <td className="mainurl">
                                             {edit === item.shorturl ? (
@@ -140,11 +92,12 @@ export const DisplayComponent: React.FC = () => {
                                                 item.url
                                             )}
                                         </td>
-
-                                        <td><button onClick={() => handleEdit(item.shorturl, item.url)}>Edit</button></td>
-                                        {/* <td><button onClick={() => handleDelete(item.shorturl)}>Delete</button></td> */}
-                                         <td><DeleteButton shorturl={item.shorturl}/></td>
-
+                                        <td>
+                                            <button onClick={() => handleEdit(item.shorturl, item.url)}>
+                                                Edit
+                                            </button>
+                                        </td>
+                                        <td><DeleteButton shorturl={item.shorturl} /></td>
                                     </tr>
                                 ))}
                         </tbody>
@@ -154,3 +107,10 @@ export const DisplayComponent: React.FC = () => {
         </div>
     );
 };
+
+
+
+
+
+
+
